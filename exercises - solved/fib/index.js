@@ -8,6 +8,55 @@
 // Example:
 //   fib(4) === 3
 
-function fib(n) {}
+
+// to improve time of recursive solution
+// memoization - store arguments of each function call along with result
+// if function is called again with same arguments, return precomputed 
+// results rather than running function again.
+function memoize(fn) {  // a generic memoization function
+    const cache = {};
+    return function(...args) {
+      if (cache[args]) {
+        return cache[args];
+      }
+  
+      const result = fn.apply(this, args);
+      cache[args] = result;
+  
+      return result;
+    };
+}
+
+function slowFib(n) {
+  if (n < 2) {
+    return n;
+  }
+
+  return fib(n - 1) + fib(n - 2); 
+  //these are references to the memoized function version and not itself now.
+}
+
+const fib = memoize(slowFib);
+// slow function -> (memoizer) -> fast function
 
 module.exports = fib;
+
+
+// function fib(n) {
+//     const result = [0, 1];
+
+//     for (let i=2; i<=n; i++){
+//         result[i] = result[i-1] + result[i-2];
+//     }
+
+//     return result[n]
+// }
+
+
+// function fib(n) {
+//     if(n<2){
+//         return n;
+//     }
+
+//     return fib(n-1) + fib(n-2);
+// }
